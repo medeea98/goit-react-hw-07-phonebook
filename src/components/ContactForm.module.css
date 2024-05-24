@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid black;
+    margin: 10px;
+    width: 300px;
+}
+input {
+    width: 200px;
+    margin: 10px;
+}
+button {
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #c6bfbfd2;
+    background-color: white;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+button:hover {
+    background-color: hsl(208, 63%, 70%);
+    cursor: pointer;
+}
+label {
+    margin-left: 10px;
+    margin-bottom: 3px;
+    margin-top: 5px;
+    font-size: medium;
+    font-weight: 700;
+}
