@@ -1,4 +1,4 @@
-import { createSlice, configureStore, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAction, configureStore, createAsyncThunk, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import axios from 'axios';
@@ -58,11 +58,7 @@ export const deleteContact = createAsyncThunk(
 const contactsSlice = createSlice({
     name: 'contacts',
     initialState: initialState.contacts,
-    reducers: {
-        setFilter: (state, action) => {
-            state.filter = action.payload;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchContacts.pending, (state) => {
@@ -104,22 +100,35 @@ const contactsSlice = createSlice({
     }
 });
 
-const persistedReducer = persistReducer(persistConfig, contactsSlice.reducer);
+const filterSlice = createSlice({
+    name: 'filter',
+    initialState: initialState.filter,
+    reducers: {
+        setFilter: (state, action) => {
+            return action.payload;
+        }
+    }
+});
+
+const rootReducer = combineReducers({
+    contacts: contactsSlice.reducer,
+    filter: filterSlice.reducer
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-    reducer: {
-        contacts: persistedReducer,
-    },
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware({
             serializableCheck: {
                 ignoredActions: [fetchContacts.pending, fetchContacts.rejected, fetchContacts.fulfilled,
                                 addContact.pending, addContact.rejected, addContact.fulfilled,
-                                deleteContact.pending, deleteContact.rejected, deleteContact.fulfilled , 'persist/PERSIST', 'persist/REHYDRATE'],
+                                 deleteContact.pending, deleteContact.rejected, deleteContact.fulfilled , 'persist/PERSIST', 'persist/REHYDRATE'],
             },
         }),
 });
 
 export const persistor = persistStore(store);
-export const { setFilter } = contactsSlice.actions;
+export const setFilter = createAction('filter/setFilter');
 export default store;

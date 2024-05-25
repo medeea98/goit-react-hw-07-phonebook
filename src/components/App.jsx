@@ -3,12 +3,12 @@ import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchContacts, addContact, deleteContact, setFilter } from '../store';
+import { fetchContacts, addContact, deleteContact, setFilter} from '../store';
 
 export const App = () => {
-  const contacts = useSelector(state => state.items);
-  const isLoading = useSelector(state => state.isLoading);
-  // const filter = useSelector(state => state.filter);
+  const contacts = useSelector(state => state.contacts.items);
+  const isLoading = useSelector(state => state.contacts.isLoading);
+  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const App = () => {
   };
 
   const handleFilterChange = (filterValue) => {
-    // dispatch(setFilter(filterValue));
+    dispatch(setFilter(filterValue));
   };
 
   const handleDelete = (id) => {
